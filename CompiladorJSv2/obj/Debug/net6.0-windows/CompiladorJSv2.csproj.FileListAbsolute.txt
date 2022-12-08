@@ -1,0 +1,17 @@
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\bin\Debug\net6.0-windows\CompiladorJSv2.exe
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\bin\Debug\net6.0-windows\CompiladorJSv2.deps.json
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\bin\Debug\net6.0-windows\CompiladorJSv2.runtimeconfig.json
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\bin\Debug\net6.0-windows\CompiladorJSv2.dll
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\bin\Debug\net6.0-windows\CompiladorJSv2.pdb
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.csproj.AssemblyReference.cache
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.Form1.resources
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.csproj.GenerateResource.cache
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.AssemblyInfoInputs.cache
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.AssemblyInfo.cs
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.dll
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\refint\CompiladorJSv2.dll
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.pdb
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\CompiladorJSv2.genruntimeconfig.cache
+C:\Users\Admin\source\repos\CompiladorJSv2\CompiladorJSv2\obj\Debug\net6.0-windows\ref\CompiladorJSv2.dll
