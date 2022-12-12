@@ -470,15 +470,6 @@ namespace CompiladorJSv2
             }
         }
 
-        public static void ExisteVariable(string lexema, NodoMetodo miNodoMetodo, int linea)
-        {
-            if (!miNodoMetodo.TSV.ContainsKey(lexema))
-            {
-                var error = new Error() { Codigo = 619, Linea = linea, MensajeError = "Variable no encontrada", TipoError = tipoError.Semantico };
-                TablaSimbolos.listaErroresSemantico.Add(error);
-            }
-        }
-
 
         static public NodoClase BusquedaNodoClasePorLexema(string lexema)
         {
@@ -582,26 +573,6 @@ namespace CompiladorJSv2
             }
         }
 
-
-
-
-
-        public static string ObtenerDireccionMemoriaRam(string lexemaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
-        {
-            var resultado =
-                nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.FirstOrDefault(y => y.Key.ToString() == lexemaVariable).Value.direccionMemoria;
-            return resultado;
-
-        }
-
-        public static NodoVariable obtenerNodoVariable(string lexemaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
-        {
-            var resultado =
-                nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.FirstOrDefault(y =>
-                y.Key.ToString() == lexemaVariable).Value;
-            return resultado;
-        }
-
         static public void ExisteVaraible(string lexema, NodoMetodo minoMetodo, int line)
         {
             herencia = true;
@@ -614,10 +585,34 @@ namespace CompiladorJSv2
         }
 
 
-
-
-
         #endregion
+
+
+
+        public static TipoDato ObtenerTipoDato(string lexamaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
+        {
+            try
+            {
+                //.miTipoDato;
+                //return nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.Values.SingleOrDefault(x => x.Lexema == lexamaVariable)
+                //return nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.Values.SingleOrDefault(x => x.Lexema == lexamaVariable).miTipoDato;
+                NodoMetodo MetodoActual = (nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value);
+                NodoVariable VariableActual = (MetodoActual.TSV.FirstOrDefault(x => x.Key == lexamaVariable).Value);
+                return VariableActual.MiTipo;
+                //return TipoDato.INT;
+            }
+            catch (Exception)
+            {
+                return TipoDato.NADA;
+            }
+
+        }
+
+
+
+
+
+
 
     }
 

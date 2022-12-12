@@ -43,14 +43,14 @@
             this.dataGridClases = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.dataGridMetodos = new System.Windows.Forms.DataGridView();
+            this.dataGridErroresSemantico = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridTokens)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridErrores)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridAtributos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridVariables)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridMetodos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridErroresSemantico)).BeginInit();
             this.SuspendLayout();
             // 
             // txtBox
@@ -136,9 +136,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(858, 45);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 15);
+            this.label3.Size = new System.Drawing.Size(101, 15);
             this.label3.TabIndex = 8;
-            this.label3.Text = "Metodos";
+            this.label3.Text = "Errores semantico";
             // 
             // label4
             // 
@@ -185,14 +185,14 @@
             this.label6.TabIndex = 13;
             this.label6.Text = "Clases";
             // 
-            // dataGridMetodos
+            // dataGridErroresSemantico
             // 
-            this.dataGridMetodos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridMetodos.Location = new System.Drawing.Point(858, 63);
-            this.dataGridMetodos.Name = "dataGridMetodos";
-            this.dataGridMetodos.RowTemplate.Height = 25;
-            this.dataGridMetodos.Size = new System.Drawing.Size(421, 177);
-            this.dataGridMetodos.TabIndex = 6;
+            this.dataGridErroresSemantico.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridErroresSemantico.Location = new System.Drawing.Point(858, 63);
+            this.dataGridErroresSemantico.Name = "dataGridErroresSemantico";
+            this.dataGridErroresSemantico.RowTemplate.Height = 25;
+            this.dataGridErroresSemantico.Size = new System.Drawing.Size(421, 177);
+            this.dataGridErroresSemantico.TabIndex = 6;
             // 
             // Form1
             // 
@@ -206,7 +206,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridAtributos);
-            this.Controls.Add(this.dataGridMetodos);
+            this.Controls.Add(this.dataGridErroresSemantico);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridErrores);
@@ -223,7 +223,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridAtributos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridVariables)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridMetodos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridErroresSemantico)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,6 +246,6 @@
         private DataGridView dataGridClases;
         private Label label5;
         private Label label6;
-        private DataGridView dataGridMetodos;
+        private DataGridView dataGridErroresSemantico;
     }
 }
