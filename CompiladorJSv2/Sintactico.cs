@@ -1038,90 +1038,8 @@ namespace CompiladorJSv2
 
             //**********************************************************************************
             //**********************************************************************************
-            //Tokens para Variables
-
-            if (swSemantico == TipoSemantico.VariablesOUT)
-            {
-                int puntero2 = 0;
-                string valor = null;
-
-                NodoVariable minodovariable = new NodoVariable();
-                minodovariable.RenglonDec = listenerSemantico[puntero2].Linea;
-                minodovariable.MitipoVariable = TipoVariable.variableLocal;
-
-                if (listenerSemantico[puntero2].ValorToken < -94 && listenerSemantico[puntero2].ValorToken > -104)
-                {
-                    switch (listenerSemantico[puntero2].ValorToken)
-                    {
-
-                        case -99:
-                            minodovariable.MiTipo = TipoDato.INT;
-                            break;
-                        case -100:
-                            minodovariable.MiTipo = TipoDato.DOBLE;
-                            break;
-                        case -102:
-                            minodovariable.MiTipo = TipoDato.STRING;
-                            break;
-                        case -103:
-                            minodovariable.MiTipo = TipoDato.BOOL;
-                            break;
-                        default:
-                            break;
-                    }
-                    puntero2++;
-                }
-                else
-                {
-                    minodovariable.MiTipo = TipoDato.NADA;
-                }
-
-                minodovariable.Lexema = listenerSemantico[puntero2].Lexema;  // nombre de varaible
-                puntero2++;
-                if (listenerSemantico[puntero2].ValorToken == -107)  //   = -107
-                {
-                    while (true)
-                    {
-                        puntero2++;
-                        //int x =  1 + a + 1 - a - b - 3 + 4;
-                        if (listenerSemantico[puntero2].ValorToken == -1)
-                        {
-                            TablaSimbolos.ExisteVaraible(listenerSemantico[puntero2].Lexema, TablaSimbolos.MetodoActivo, listenerSemantico[puntero2].Linea);
-                            if (TablaSimbolos.herencia == true)
-                            {
-                                valor += listenerSemantico[puntero2].Lexema;
-                                puntero2++;
-                            }
-                        }
-                        if (listenerSemantico[puntero2].ValorToken == -2 || listenerSemantico[puntero2].ValorToken == -3)
-                        {
-                            valor += listenerSemantico[puntero2].Lexema;
-                            puntero2++;
-                        }
-                        valor += listenerSemantico[puntero2].Lexema;
-
-                        if (listenerSemantico[puntero2].ValorToken == -27)
-                        {
-                            minodovariable.Valor = valor;
-                            break;
-                        }
-
-
-                    }
-
-                }
-
-                TablaSimbolos.InsertarNodoVariable(minodovariable, TablaSimbolos.ClaseActiva, TablaSimbolos.MetodoActivo.Lexema);
-
-                listenerSemantico = new List<Token>();
-                swSemantico = TipoSemantico.Ninguno;
-                puntero2 = 0;
-            }
-
-
-            //**********************************************************************************
-            //**********************************************************************************
             //Lista de tokens de los atributos
+            //Si funciona
 
             if (swSemantico == TipoSemantico.ATributosOUT)
             {
@@ -1201,6 +1119,131 @@ namespace CompiladorJSv2
                     swSemantico = TipoSemantico.Ninguno;
                     puntero2 = 0;
                 }
+
+            }
+
+
+
+
+            //**********************************************************************************
+            //**********************************************************************************
+            //Tokens para el metodo
+
+            if (swSemantico == TipoSemantico.MetodoOUT)
+            {
+                int puntero2 = 0;
+
+                NodoMetodo minodoMetodo = new NodoMetodo();
+                NodoVariable minodovariable = new NodoVariable();
+
+
+                if (listenerSemantico[puntero2].ValorToken < -109 && listenerSemantico[puntero2].ValorToken > -113)
+                {
+                    switch (listenerSemantico[puntero2].ValorToken)
+                    {
+                        case -110:
+                            minodoMetodo.MiAlcance = Alcance.Public;
+                            break;
+                        case -111:
+                            minodoMetodo.MiAlcance = Alcance.Protected;
+                            break;
+                        case -112:
+                            minodoMetodo.MiAlcance = Alcance.Private;
+                            break;
+                        default:
+                            break;
+                    }
+                    puntero2++;
+                }
+                else
+                {
+                    minodoMetodo.MiAlcance = Alcance.Public;
+                }
+                if (listenerSemantico[puntero2].ValorToken < -94 && listenerSemantico[puntero2].ValorToken > -104)
+                {
+                    switch (listenerSemantico[puntero2].ValorToken)
+                    {
+                        case -95:
+                            minodoMetodo.MiRegreso = Regreso.VOID;
+                            break;
+                        case -99:
+                            minodoMetodo.MiRegreso = Regreso.INT;
+                            break;
+                        case -100:
+                            minodoMetodo.MiRegreso = Regreso.DOUBLE;
+                            break;
+                        case -102:
+                            minodoMetodo.MiRegreso = Regreso.STRING;
+                            break;
+                        case -103:
+                            minodoMetodo.MiRegreso = Regreso.BOOL;
+                            break;
+                        default:
+                            break;
+                    }
+                    puntero2++;
+                }
+                else
+                {
+                    minodoMetodo.MiRegreso = Regreso.VOID;
+                }
+
+                minodoMetodo.Lexema = listenerSemantico[puntero2].Lexema; // nombre del metodo
+                TablaSimbolos.MetodoActivo = minodoMetodo;               // Metodo Actual
+                minodoMetodo.RenglonDeclaracion = listenerSemantico[puntero2].Linea; // Liena de declaracion
+                puntero2++; // (
+                puntero2++; // int or doble or string , bool
+
+                // publico void repetir ( String msg , int repeticiones)
+                if (listenerSemantico[puntero2].ValorToken < -98
+                    && listenerSemantico[puntero2].ValorToken > -104) // verificar si hay paramatros
+                {
+                    do
+                    {
+                        //puntero2++;
+                        switch (listenerSemantico[puntero2].ValorToken)
+                        {
+
+                            case -99:
+                                minodovariable.miTipoDato = TipoDato.INT;
+                                break;
+                            case -100:
+                                minodovariable.miTipoDato = TipoDato.DOBLE;
+                                break;
+                            case -102:
+                                minodovariable.miTipoDato = TipoDato.STRING;
+                                break;
+                            case -103:
+                                minodovariable.miTipoDato = TipoDato.BOOL;
+                                break;
+                            default:
+                                break;
+                        }
+                        puntero2++;
+
+                        minodovariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
+                        minodovariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
+                        minodovariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
+                        listaparam.Add(minodovariable);
+                        minodovariable = new NodoVariable();
+
+                        puntero2++;
+                        if (listenerSemantico[puntero2].ValorToken != -26) break;
+                        puntero2++;
+
+                    } while (true);
+
+
+                }
+                TablaSimbolos.InsertarNodoMetodo(minodoMetodo, listaparam,
+                    TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
+
+                metodoActual = minodoMetodo.Lexema;
+
+                listenerSemantico = new List<Token>();
+                listaparam.Clear();
+                swSemantico = TipoSemantico.Ninguno;
+                puntero2 = 0;
 
             }
 
