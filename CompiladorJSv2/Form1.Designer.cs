@@ -36,21 +36,21 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.compiladorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ejecutarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridAtributos = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.dataGridVariables = new System.Windows.Forms.DataGridView();
-            this.dataGridClases = new System.Windows.Forms.DataGridView();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.dataGridErroresSemantico = new System.Windows.Forms.DataGridView();
+            this.dataGridClases = new System.Windows.Forms.DataGridView();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dataGridParametros = new System.Windows.Forms.DataGridView();
+            this.label6 = new System.Windows.Forms.Label();
+            this.dataGridMetodos = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridTokens)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridErrores)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridAtributos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridVariables)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridErroresSemantico)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridParametros)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridMetodos)).BeginInit();
             this.SuspendLayout();
             // 
             // txtBox
@@ -73,7 +73,7 @@
             // dataGridErrores
             // 
             this.dataGridErrores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridErrores.Location = new System.Drawing.Point(383, 318);
+            this.dataGridErrores.Location = new System.Drawing.Point(383, 277);
             this.dataGridErrores.Name = "dataGridErrores";
             this.dataGridErrores.RowTemplate.Height = 25;
             this.dataGridErrores.Size = new System.Drawing.Size(421, 174);
@@ -91,7 +91,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(383, 300);
+            this.label2.Location = new System.Drawing.Point(383, 259);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 15);
             this.label2.TabIndex = 4;
@@ -103,7 +103,7 @@
             this.compiladorToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1370, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1284, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -122,15 +122,6 @@
             this.ejecutarToolStripMenuItem.Text = "Ejecutar";
             this.ejecutarToolStripMenuItem.Click += new System.EventHandler(this.ejecutarToolStripMenuItem_Click);
             // 
-            // dataGridAtributos
-            // 
-            this.dataGridAtributos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridAtributos.Location = new System.Drawing.Point(858, 318);
-            this.dataGridAtributos.Name = "dataGridAtributos";
-            this.dataGridAtributos.RowTemplate.Height = 25;
-            this.dataGridAtributos.Size = new System.Drawing.Size(421, 177);
-            this.dataGridAtributos.TabIndex = 7;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -139,51 +130,6 @@
             this.label3.Size = new System.Drawing.Size(101, 15);
             this.label3.TabIndex = 8;
             this.label3.Text = "Errores semantico";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(858, 300);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Atributos";
-            // 
-            // dataGridVariables
-            // 
-            this.dataGridVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridVariables.Location = new System.Drawing.Point(383, 547);
-            this.dataGridVariables.Name = "dataGridVariables";
-            this.dataGridVariables.RowTemplate.Height = 25;
-            this.dataGridVariables.Size = new System.Drawing.Size(421, 174);
-            this.dataGridVariables.TabIndex = 10;
-            // 
-            // dataGridClases
-            // 
-            this.dataGridClases.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridClases.Location = new System.Drawing.Point(858, 547);
-            this.dataGridClases.Name = "dataGridClases";
-            this.dataGridClases.RowTemplate.Height = 25;
-            this.dataGridClases.Size = new System.Drawing.Size(421, 174);
-            this.dataGridClases.TabIndex = 11;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(383, 529);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 15);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Variables";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(858, 529);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(40, 15);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Clases";
             // 
             // dataGridErroresSemantico
             // 
@@ -194,18 +140,72 @@
             this.dataGridErroresSemantico.Size = new System.Drawing.Size(421, 177);
             this.dataGridErroresSemantico.TabIndex = 6;
             // 
+            // dataGridClases
+            // 
+            this.dataGridClases.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridClases.Location = new System.Drawing.Point(858, 274);
+            this.dataGridClases.Name = "dataGridClases";
+            this.dataGridClases.RowTemplate.Height = 25;
+            this.dataGridClases.Size = new System.Drawing.Size(421, 177);
+            this.dataGridClases.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(858, 256);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(40, 15);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Clases";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(383, 500);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(56, 15);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Atributos";
+            // 
+            // dataGridParametros
+            // 
+            this.dataGridParametros.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridParametros.Location = new System.Drawing.Point(383, 518);
+            this.dataGridParametros.Name = "dataGridParametros";
+            this.dataGridParametros.RowTemplate.Height = 25;
+            this.dataGridParametros.Size = new System.Drawing.Size(421, 174);
+            this.dataGridParametros.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(863, 500);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 15);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "Metodos";
+            // 
+            // dataGridMetodos
+            // 
+            this.dataGridMetodos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridMetodos.Location = new System.Drawing.Point(863, 518);
+            this.dataGridMetodos.Name = "dataGridMetodos";
+            this.dataGridMetodos.RowTemplate.Height = 25;
+            this.dataGridMetodos.Size = new System.Drawing.Size(421, 177);
+            this.dataGridMetodos.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1370, 749);
+            this.ClientSize = new System.Drawing.Size(1284, 704);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.dataGridMetodos);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.dataGridClases);
-            this.Controls.Add(this.dataGridVariables);
+            this.Controls.Add(this.dataGridParametros);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.dataGridClases);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.dataGridAtributos);
             this.Controls.Add(this.dataGridErroresSemantico);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -220,10 +220,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridErrores)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridAtributos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridVariables)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridErroresSemantico)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridClases)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridParametros)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridMetodos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -239,13 +239,13 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem compiladorToolStripMenuItem;
         private ToolStripMenuItem ejecutarToolStripMenuItem;
-        private DataGridView dataGridAtributos;
         private Label label3;
-        private Label label4;
-        private DataGridView dataGridVariables;
-        private DataGridView dataGridClases;
-        private Label label5;
-        private Label label6;
         private DataGridView dataGridErroresSemantico;
+        private DataGridView dataGridClases;
+        private Label label4;
+        private Label label5;
+        private DataGridView dataGridParametros;
+        private Label label6;
+        private DataGridView dataGridMetodos;
     }
 }

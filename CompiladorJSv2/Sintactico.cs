@@ -56,7 +56,7 @@ namespace CompiladorJSv2
             MetodoOUT,
 
             AtributosIN,
-            ATributosOUT,
+            AtributosOUT,
 
             VariablesIN,
             VariablesOUT,
@@ -959,16 +959,13 @@ namespace CompiladorJSv2
             }
             if (listaTokens[punteroLexico].ValorToken == -27 /* ; */ && swSemantico == TipoSemantico.MetodoIN)
             {
-                swSemantico = TipoSemantico.ATributosOUT;
+                swSemantico = TipoSemantico.AtributosOUT;
             }
             if (listaTokens[punteroLexico].ValorToken == -27 /* ; */ && swSemantico == TipoSemantico.VariablesIN)
             {
-                swSemantico = TipoSemantico.VariablesOUT;
+                swSemantico = TipoSemantico.AtributosOUT;
             }
 
-
-            //**********************************************************************************
-            //**********************************************************************************
             //Lista de tokens temporal para una clase
             //Si detecta colision
 
@@ -1035,13 +1032,10 @@ namespace CompiladorJSv2
 
             }
 
-
-            //**********************************************************************************
-            //**********************************************************************************
             //Lista de tokens de los atributos
             //Si funciona
 
-            if (swSemantico == TipoSemantico.ATributosOUT)
+            if (swSemantico == TipoSemantico.AtributosOUT)
             {
                 int puntero2 = 0;
                 NodoAtributo minodoatributo = new NodoAtributo();
@@ -1122,11 +1116,6 @@ namespace CompiladorJSv2
 
             }
 
-
-
-
-            //**********************************************************************************
-            //**********************************************************************************
             //Tokens para el metodo
 
             if (swSemantico == TipoSemantico.MetodoOUT)
@@ -1160,6 +1149,7 @@ namespace CompiladorJSv2
                     minodoMetodo.MiAlcance = Alcance.Public;
                 }
                 if (listenerSemantico[puntero2].ValorToken < -94 && listenerSemantico[puntero2].ValorToken > -104)
+                //-95 void     -99 int     -100 double     -102 string     -103 bool
                 {
                     switch (listenerSemantico[puntero2].ValorToken)
                     {
@@ -1247,8 +1237,7 @@ namespace CompiladorJSv2
 
             }
 
-
-
+            
 
 
 

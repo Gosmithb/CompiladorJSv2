@@ -410,7 +410,7 @@ namespace CompiladorJSv2
 
     }   // Modificado
 
-    static public class TablaSimbolos
+     public class TablaSimbolos
     {
         public static List<Error> listaErroresSemantico;
 
@@ -451,7 +451,7 @@ namespace CompiladorJSv2
         /// Metodo para insertar los nodos de clases en la TS
         /// </summary>
         /// <param name="miNodoClase">nodo clase</param>
-        static public void InsertarNodoClase(NodoClase miNodoClase)
+         public static void InsertarNodoClase(NodoClase miNodoClase)
         {
             if (!TablaSimbolosClase.ContainsKey(miNodoClase.Lexema)) // verificar una colision
             {
@@ -466,10 +466,12 @@ namespace CompiladorJSv2
                     MensajeError = "Ya existe una implementacion con ese identificador",
                     TipoError = tipoError.Semantico
                 };
-                TablaSimbolos.listaErroresSemantico.Add(error);
-            }
-        }
+                 TablaSimbolos.listaErroresSemantico.Add(error);
 
+            }
+           
+        }
+    
 
         static public NodoClase BusquedaNodoClasePorLexema(string lexema)
         {
@@ -516,7 +518,7 @@ namespace CompiladorJSv2
 
 
         #endregion
-        #region METODOS para TS de Metodos
+        #region METODOS PARA TS de METODOS
         public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoVariable> misParametros, NodoClase nodoClaseActiva)
         {
             if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
@@ -544,7 +546,7 @@ namespace CompiladorJSv2
             }
             else
             {
-                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.RenglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase", TipoError = tipoError.Semantico };
+                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
             }
         }
@@ -573,7 +575,7 @@ namespace CompiladorJSv2
             }
         }
 
-        static public void ExisteVaraible(string lexema, NodoMetodo minoMetodo, int line)
+        static public void ExisteVariable(string lexema, NodoMetodo minoMetodo, int line)
         {
             herencia = true;
             if (!minoMetodo.TSV.ContainsKey(lexema))
@@ -583,30 +585,7 @@ namespace CompiladorJSv2
                 herencia = false;
             }
         }
-
-
         #endregion
-
-
-
-        public static TipoDato ObtenerTipoDato(string lexamaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
-        {
-            try
-            {
-                //.miTipoDato;
-                //return nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.Values.SingleOrDefault(x => x.Lexema == lexamaVariable)
-                //return nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.Values.SingleOrDefault(x => x.Lexema == lexamaVariable).miTipoDato;
-                NodoMetodo MetodoActual = (nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value);
-                NodoVariable VariableActual = (MetodoActual.TSV.FirstOrDefault(x => x.Key == lexamaVariable).Value);
-                return VariableActual.MiTipo;
-                //return TipoDato.INT;
-            }
-            catch (Exception)
-            {
-                return TipoDato.NADA;
-            }
-
-        }
 
 
 

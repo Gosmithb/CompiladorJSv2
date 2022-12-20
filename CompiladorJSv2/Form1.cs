@@ -18,24 +18,35 @@ namespace CompiladorJSv2
 
                 var objSintactico = new Sintactico(lexico.listaToken);
                 objSintactico.EjecutarSintactico(objSintactico.listaTokens);
-
+                var objlista = new TablaSimbolos();
                 
 
                 List<Error> listaErroresLexico = lexico.listaErrorLexico;
                 List<Error> listaErroresSintactico = objSintactico.listaError;
+                List<Error> listaErroresSemantico = TablaSimbolos.listaErroresSemantico;
 
-                //List<Token> listaSemantico = (from x in TablaSimbolos.listaErroresSemantico select x.Linea).ToList();
-                
                 List<Error> listaErrores = listaErroresLexico.Union(listaErroresSintactico).ToList();
 
+                //Lista Tokens
                 var Lista = new BindingList<Token>(lexico.listaToken);
                 dataGridTokens.DataSource = null;
                 dataGridTokens.DataSource = Lista;
+
+                //Errores sintactico
                 dataGridErrores.DataSource = null;
                 dataGridErrores.DataSource = listaErrores;
 
+                //Clases
+                var listaClases = (from x in TablaSimbolos.TablaSimbolosClase select x.Value).ToList();
+                dataGridClases.DataSource = null;
+                dataGridClases.DataSource = listaClases;
+
+                //Errores semantico
                 dataGridErroresSemantico.DataSource = null;
-                dataGridErroresSemantico.DataSource = listaErroresSintactico;
+                dataGridErroresSemantico.DataSource = listaErroresSemantico;
+
+                //Atributos
+                //var listaParametros = (from x in  select x.Value).ToList();
 
             
             }
