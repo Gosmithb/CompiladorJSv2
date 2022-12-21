@@ -13,7 +13,7 @@ namespace CompiladorJSv2
 
         public List<Token> listaTokens;  // va ser una copia de la lista de tokens original   ***** COLA  *****
 
-        public List<NodoVariable> listaparam = new List<NodoVariable>();
+        public List<NodoAtributo> listaparam = new List<NodoAtributo>();
 
         private int[] listaSintactico = new int[100]; // analizador sintactico LIFO    **** PILA *****
 
@@ -1123,7 +1123,7 @@ namespace CompiladorJSv2
                 int puntero2 = 0;
 
                 NodoMetodo minodoMetodo = new NodoMetodo();
-                NodoVariable minodovariable = new NodoVariable();
+                NodoAtributo minodoatributo = new NodoAtributo();
 
 
                 if (listenerSemantico[puntero2].ValorToken < -109 && listenerSemantico[puntero2].ValorToken > -113)
@@ -1195,27 +1195,27 @@ namespace CompiladorJSv2
                         {
 
                             case -99:
-                                minodovariable.miTipoDato = TipoDato.INT;
+                                minodoatributo.MiTipo = TipoDato.INT;
                                 break;
                             case -100:
-                                minodovariable.miTipoDato = TipoDato.DOBLE;
+                                minodoatributo.MiTipo = TipoDato.DOBLE;
                                 break;
                             case -102:
-                                minodovariable.miTipoDato = TipoDato.STRING;
+                                minodoatributo.MiTipo = TipoDato.STRING;
                                 break;
                             case -103:
-                                minodovariable.miTipoDato = TipoDato.BOOL;
+                                minodoatributo.MiTipo = TipoDato.BOOL;
                                 break;
                             default:
                                 break;
                         }
                         puntero2++;
 
-                        minodovariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
-                        minodovariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
-                        minodovariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
-                        listaparam.Add(minodovariable);
-                        minodovariable = new NodoVariable();
+                        minodoatributo.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
+                        minodoatributo.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
+                        minodoatributo.MiTipo = TipoDato.parametro;         //Tipo de variable: Parametro
+                        listaparam.Add(minodoatributo);
+                        minodoatributo = new NodoAtributo();
 
                         puntero2++;
                         if (listenerSemantico[puntero2].ValorToken != -26) break;

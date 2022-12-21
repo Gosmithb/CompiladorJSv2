@@ -21,7 +21,8 @@ namespace CompiladorJSv2
         OBJECT,
         BYTE,
         CADENA,
-        NADA
+        NADA,
+        parametro
     }
     public enum Regreso
     {
@@ -329,8 +330,8 @@ namespace CompiladorJSv2
         public int renglonDeclaracion;
         public int[] referencias;
 
-        public Dictionary<object, NodoVariable> TablaSimbolosVariables =
-            new Dictionary<object, NodoVariable>();
+        public Dictionary<object, NodoAtributo> TablaSimbolosVariables =
+            new Dictionary<object, NodoAtributo>();
 
         public string Lexema
         {
@@ -393,7 +394,7 @@ namespace CompiladorJSv2
             }
         }
 
-        public Dictionary<object, NodoVariable> TSV
+        public Dictionary<object, NodoAtributo> TSV
         {
             get
             {
@@ -519,7 +520,7 @@ namespace CompiladorJSv2
 
         #endregion
         #region METODOS PARA TS de METODOS
-        public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoVariable> misParametros, NodoClase nodoClaseActiva)
+        public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoAtributo> misParametros, NodoClase nodoClaseActiva)
         {
             if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
             {
@@ -528,7 +529,15 @@ namespace CompiladorJSv2
 
                     foreach (var item in misParametros)
                     {
-                        miNodoMetodo.TablaSimbolosVariables.Add(item.lexema, item);
+                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //Reviso colision de parametros 
+                        {
+                            miNodoMetodo.TablaSimbolosVariables.Add(item.lexema, item);
+                        }
+                        else
+                        {
+                            var error = new Error() { Codigo = 605, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "No puedes declarar dos parametros iguales", TipoError = tipoError.Semantico };
+                            TablaSimbolos.listaErroresSemantico.Add(error);
+                        }
                     }
                     nodoClaseActiva.TSM.Add(miNodoMetodo.lexema, miNodoMetodo);
 
@@ -552,41 +561,6 @@ namespace CompiladorJSv2
         }
 
         #endregion
-        #region METODOS para TS de Variables
-        public static void InsertarNodoVariable(NodoVariable nodoVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo )
-        {
-            if (!nodoClaseActiva.TSM.ContainsKey(nodoVariable.Lexema) || TablaSimbolos.TablaSimbolosClase.ContainsKey(nodoVariable.Lexema)) 
-            {
-                var nodoMetodo = nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value;
-                if (!nodoMetodo.TablaSimbolosVariables.ContainsKey(nodoVariable.Lexema))
-                {
-                    nodoMetodo.TablaSimbolosVariables.Add(nodoVariable.Lexema, nodoVariable);
-                }
-                else
-                {
-                    var error = new Error() { Codigo = 605, Linea = nodoVariable.RenglonDec, MensajeError = "Nombre e variable local ya existe en el contexto actual", TipoError = tipoError.Semantico };
-                    TablaSimbolos.listaErroresSemantico.Add(error);
-                }
-            }
-            else
-            {
-                var error = new Error() { Codigo = 606, Linea = nodoVariable.RenglonDec, MensajeError = "Tu nombre de meotod no puede llamarse como el nombre de la clase", TipoError = tipoError.Semantico };
-                TablaSimbolos.listaErroresSemantico.Add(error);
-            }
-        }
-
-        static public void ExisteVariable(string lexema, NodoMetodo minoMetodo, int line)
-        {
-            herencia = true;
-            if (!minoMetodo.TSV.ContainsKey(lexema))
-            {
-                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable no encontrada", TipoError = tipoError.Semantico };
-                TablaSimbolos.listaErroresSemantico.Add(error);
-                herencia = false;
-            }
-        }
-        #endregion
-
 
 
 
