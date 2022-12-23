@@ -505,37 +505,52 @@ namespace CompiladorJSv2
         static public void InsertarNodoAtributo
             (NodoAtributo miNodoAtributo, NodoClase nodoClaseActual)
         {
-            if (!nodoClaseActual.TSA.ContainsKey(miNodoAtributo.lexema))
+            
+            if (!tablaSimbolosClase.ContainsKey(miNodoAtributo.lexema)) //Verificar que el nombre de la clase no se uso
             {
-                nodoClaseActual.TSA.Add(miNodoAtributo.lexema, miNodoAtributo);
+                if (!nodoClaseActual.TSA.ContainsKey(miNodoAtributo.lexema))
+                {
+                    nodoClaseActual.TSA.Add(miNodoAtributo.lexema, miNodoAtributo);
+                }
+                else
+                {
+                    var error = new Error() { Codigo = 601, Linea = miNodoAtributo.reglonDec, MensajeError = "Ya existe un miembro con ese identificador", TipoError = tipoError.Semantico };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
+                }
+
             }
             else
             {
-                var error = new Error() { Codigo = 601, Linea = miNodoAtributo.reglonDec, MensajeError = "Ya existe un miembro con ese identificador", TipoError = tipoError.Semantico };
+                var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Una variable no puede tener el mismo nombre de la clase", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
             }
 
         }
 
-
         #endregion
         #region METODOS PARA TS de METODOS
         public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoAtributo> misParametros, NodoClase nodoClaseActiva)
         {
-            if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
+            
+           if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
             {
                 if (!nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema))
                 {
 
                     foreach (var item in misParametros)
                     {
-                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //Reviso colision de parametros 
+                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //reviso colision de parametros 
                         {
                             miNodoMetodo.TablaSimbolosVariables.Add(item.lexema, item);
                         }
                         else
                         {
-                            var error = new Error() { Codigo = 605, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "No puedes declarar dos parametros iguales", TipoError = tipoError.Semantico };
+                            var error = new Error() { Codigo = 605, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "No puedes declarar dos parametros con el mismo nombre", TipoError = tipoError.Semantico };
+                            TablaSimbolos.listaErroresSemantico.Add(error);
+                        }
+                        if (nodoClaseActiva.TSA.ContainsKey(miNodoMetodo.lexema))
+                        {
+                            var error = new Error() { Codigo = 606, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Variable ya en utilizacion", TipoError = tipoError.Semantico };
                             TablaSimbolos.listaErroresSemantico.Add(error);
                         }
                     }
@@ -555,7 +570,7 @@ namespace CompiladorJSv2
             }
             else
             {
-                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase", TipoError = tipoError.Semantico };
+                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase o como otro metodo", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
             }
         }

@@ -1059,7 +1059,7 @@ namespace CompiladorJSv2
                 }
                 else
                 {
-                    minodoatributo.MiAlcance = Alcance.Private;
+                    minodoatributo.MiAlcance = Alcance.Public;
                 }
 
                 if (listenerSemantico[puntero2].ValorToken < -94 && listenerSemantico[puntero2].ValorToken > -104)
@@ -1089,7 +1089,7 @@ namespace CompiladorJSv2
                 }
 
                 puntero2++;
-                minodoatributo.Lexema = listenerSemantico[puntero2].Lexema;
+                minodoatributo.Lexema = listenerSemantico[puntero2].Lexema; //nombre de variable
                 puntero2++;
 
                 if (listenerSemantico[puntero2].ValorToken == -107)  // =
@@ -1117,7 +1117,7 @@ namespace CompiladorJSv2
             }
 
             //Tokens para el metodo
-
+            //Si funciona
             if (swSemantico == TipoSemantico.MetodoOUT)
             {
                 int puntero2 = 0;
@@ -1213,7 +1213,7 @@ namespace CompiladorJSv2
 
                         minodoatributo.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
                         minodoatributo.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
-                        minodoatributo.MiTipo = TipoDato.parametro;         //Tipo de variable: Parametro
+                        //minodoatributo.MiTipo = TipoDato.parametro;         //Tipo de variable: Parametro
                         listaparam.Add(minodoatributo);
                         minodoatributo = new NodoAtributo();
 
