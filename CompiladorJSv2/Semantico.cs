@@ -411,7 +411,7 @@ namespace CompiladorJSv2
 
     }   // Modificado
 
-     public class TablaSimbolos
+    public class TablaSimbolos
     {
         public static List<Error> listaErroresSemantico;
 
@@ -452,7 +452,7 @@ namespace CompiladorJSv2
         /// Metodo para insertar los nodos de clases en la TS
         /// </summary>
         /// <param name="miNodoClase">nodo clase</param>
-         public static void InsertarNodoClase(NodoClase miNodoClase)
+        public static void InsertarNodoClase(NodoClase miNodoClase)
         {
             if (!TablaSimbolosClase.ContainsKey(miNodoClase.Lexema)) // verificar una colision
             {
@@ -467,12 +467,12 @@ namespace CompiladorJSv2
                     MensajeError = "Ya existe una implementacion con ese identificador",
                     TipoError = tipoError.Semantico
                 };
-                 TablaSimbolos.listaErroresSemantico.Add(error);
+                TablaSimbolos.listaErroresSemantico.Add(error);
 
             }
-           
+
         }
-    
+
 
         static public NodoClase BusquedaNodoClasePorLexema(string lexema)
         {
@@ -505,21 +505,21 @@ namespace CompiladorJSv2
         static public void InsertarNodoAtributo
             (NodoAtributo miNodoAtributo, NodoClase nodoClaseActual)
         {
-            
+
             if (!tablaSimbolosClase.ContainsKey(miNodoAtributo.lexema)) //Verificar que el nombre de la clase no se uso
             {
-                
+
                 //if (miNodoAtributo.miAlcance == Alcance.Public)
                 //{
-                    if (!nodoClaseActual.TSA.ContainsKey(miNodoAtributo.lexema)) //Verificar que no exista
-                    {
-                        nodoClaseActual.TSA.Add(miNodoAtributo.lexema, miNodoAtributo);
-                    }
-                    else
-                    {
-                        var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Ya existe un miembro con ese identificador", TipoError = tipoError.Semantico };
-                        TablaSimbolos.listaErroresSemantico.Add(error);
-                    }
+                if (!nodoClaseActual.TSA.ContainsKey(miNodoAtributo.lexema)) //Verificar que no exista
+                {
+                    nodoClaseActual.TSA.Add(miNodoAtributo.lexema, miNodoAtributo);
+                }
+                else
+                {
+                    var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Ya existe un miembro con ese identificador", TipoError = tipoError.Semantico };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
+                }
                 //}
 
 
@@ -537,43 +537,82 @@ namespace CompiladorJSv2
         #region METODOS PARA TS de METODOS
         public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoVariable> misParametros, NodoClase nodoClaseActiva)
         {
-            
-           if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
+
+            if (nodoClaseActiva.Lexema != miNodoMetodo.lexema && !nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.lexema) && !nodoClaseActiva.TSA.ContainsKey(miNodoMetodo.lexema)) // verificar que el nombre de la clase no se uso
             {
 
-                    foreach (var item in misParametros)
+                foreach (var item in misParametros)
+                {
+                    if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //reviso colision de parametros 
                     {
-                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //reviso colision de parametros 
-                        {
-                            miNodoMetodo.TablaSimbolosVariables.Add(item.lexema, item);
-                        }
-                        else
-                        {
-                            var error = new Error() { Codigo = 605, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "No puedes declarar dos parametros con el mismo nombre", TipoError = tipoError.Semantico };
-                            TablaSimbolos.listaErroresSemantico.Add(error);
-                        }
-
+                        miNodoMetodo.TablaSimbolosVariables.Add(item.lexema, item);
                     }
-                    nodoClaseActiva.TSM.Add(miNodoMetodo.lexema, miNodoMetodo);
+                    else
+                    {
+                        var error = new Error() { Codigo = 605, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "No puedes declarar dos parametros con el mismo nombre", TipoError = tipoError.Semantico };
+                        TablaSimbolos.listaErroresSemantico.Add(error);
+                    }
+
+                }
+                nodoClaseActiva.TSM.Add(miNodoMetodo.lexema, miNodoMetodo);
 
             }
             else
             {
-                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase o como otro metodo", TipoError = tipoError.Semantico };
+                var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase, otro metodo o variable", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
             }
 
-            
+
 
 
         }
 
         #endregion
 
+        #region METODOS PARA TS de VARIABLES y PARAMETROS
+
+        public static void InsertarNodoVariable(NodoVariable miNodoVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
+        {
+
+            if (!nodoClaseActiva.TSM.ContainsKey(miNodoVariable.lexema) || TablaSimbolos.TablaSimbolosClase.ContainsKey(miNodoVariable.lexema))
+            {
+                var nodoMetodo = nodoClaseActiva.TSM.SingleOrDefault(x => x.Key == nombreMetodoActivo).Value;
+                if (!nodoMetodo.TablaSimbolosVariables.ContainsKey(miNodoVariable.lexema))
+                {
+                    nodoMetodo.TablaSimbolosVariables
+                        .Add(miNodoVariable.lexema, miNodoVariable);
+
+                }
+                else
+                {
+                    var error = new Error() { Codigo = 605, Linea = miNodoVariable.reglonDec, MensajeError = "nombre de variable local ya existe en el contexto", TipoError = tipoError.Semantico };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
+                }
+            }
+            else
+            {
+                var error = new Error() { Codigo = 604, Linea = miNodoVariable.reglonDec, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase", TipoError = tipoError.Semantico };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+            }
+        }
 
 
 
+        public static void ExisteVariable(string lexema, NodoMetodo minoMetodo, int line)
+        {
+            herencia = true;
+            if (!minoMetodo.TSV.ContainsKey(lexema))
+            {
+                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable no encontrada", TipoError = tipoError.Semantico };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+                herencia = false;
+            }
+        }
 
+
+
+        #endregion
 
     }
 
