@@ -65,7 +65,7 @@ namespace CompiladorJSv2
             AsignacionOUT,
 
             InvocacionIN,
-            InvocacionOUT
+            InvocacionOUT,
 
         }
 
@@ -202,7 +202,7 @@ namespace CompiladorJSv2
                 {-8,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
                 {-9,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
                 {1023,1051,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
-                {-120,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},///////////
+                {-120,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
                 {1024,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
                 {1032,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
                 {1039,-130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0},
@@ -1361,7 +1361,7 @@ namespace CompiladorJSv2
                 puntero2 = 0;
             }
 
-
+            //Tokens para invocacion de metodos
             if (swSemantico == TipoSemantico.InvocacionOUT)
             {
                 int puntero2 = 0;
@@ -1377,31 +1377,11 @@ namespace CompiladorJSv2
                 puntero2++; // (
                 puntero2++; // Parametros a mandar
 
-                if (listenerSemantico[puntero2].ValorToken < -98
-                    && listenerSemantico[puntero2].ValorToken > -104) // verificar si hay paramatros
+                if (listenerSemantico[puntero2].ValorToken == -1) // verificar si hay paramatros
                 {
                     do
                     {
-                        switch (listenerSemantico[puntero2].ValorToken)
-                        {
-
-                            case -99:
-                                minodoVariable.miTipoDato = TipoDato.INT;
-                                break;
-                            case -100:
-                                minodoVariable.miTipoDato = TipoDato.DOBLE;
-                                break;
-                            case -102:
-                                minodoVariable.miTipoDato = TipoDato.STRING;
-                                break;
-                            case -103:
-                                minodoVariable.miTipoDato = TipoDato.BOOL;
-                                break;
-                            default:
-                                break;
-                        }
-                        puntero2++;
-
+                        
                         minodoVariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
                         minodoVariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
                         minodoVariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
@@ -1416,14 +1396,17 @@ namespace CompiladorJSv2
 
 
                 }
-                
+
+                var claseActiva = TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema);
+                var lexemaMetodo = TablaSimbolos.BuscarNodoMetodoPorLexema(minodoMetodo, claseActiva);
+                var parametrosViejos = TablaSimbolos.ObtenerParametrosMetodo(lexemaMetodo, claseActiva);
 
                 TablaSimbolos.ComprobarInvocacion(
-                    TablaSimbolos.BuscarNodoMetodoPorLexema(minodoMetodo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema)),
-                    TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema)
+                    lexemaMetodo,
+                    claseActiva,
+                    listaparam
                     );
 
-                metodoActual = minodoMetodo.Lexema;
 
                 listenerSemantico = new List<Token>();
                 listaparam.Clear();
@@ -1436,7 +1419,10 @@ namespace CompiladorJSv2
 
             }
 
-
+            if (swSemantico == TipoSemantico.AsignacionOUT)
+            {
+               
+            }
 
 
 

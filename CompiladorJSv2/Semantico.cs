@@ -593,14 +593,14 @@ namespace CompiladorJSv2
             return nodo.Value.miRegreso;
         }
 
-        public static List<NodoVariable> ObtenerParametrosMetodo(string lexemaMetodo, NodoClase nodoClaseActiva)
+        public static List<NodoVariable> ObtenerParametrosMetodo(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva)
         {
-            var nodo = nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == lexemaMetodo);
+            var nodo = nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == miNodoMetodo.Lexema);
             var nodoVariables = nodo.Value.TablaSimbolosVariables;
             return nodoVariables.Values.ToList();
         }
 
-        public static void ComprobarInvocacion(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva)
+        public static void ComprobarInvocacion(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva, List<NodoVariable> parametrosNuevos)
         {
             if (!(miNodoMetodo==null))
             {
@@ -614,6 +614,25 @@ namespace CompiladorJSv2
                         TipoError = tipoError.Semantico
                     };
                     TablaSimbolos.listaErroresSemantico.Add(error);
+                }
+                else
+                {
+                    foreach (var item in parametrosNuevos)
+                    {
+                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //Reviso si existen los parametros en el metodo invocado
+                        {
+                            var error = new Error()
+                            {
+                                Codigo = 623,
+                                Linea = miNodoMetodo.renglonDeclaracion,
+                                MensajeError = "Parametros no coinciden",
+                                TipoError = tipoError.Semantico
+                            };
+                            TablaSimbolos.listaErroresSemantico.Add(error);
+                        }
+
+                    }
+
                 }
             }
             else
