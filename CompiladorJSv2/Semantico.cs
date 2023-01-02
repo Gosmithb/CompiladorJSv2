@@ -533,6 +533,24 @@ namespace CompiladorJSv2
 
         }
 
+        public static void ExisteVariableClases(string lexema, NodoClase minodoClase, int line)
+        {
+            herencia = true;
+            if (!minodoClase.TSA.ContainsKey(lexema))
+            {
+                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable no encontrada", TipoError = tipoError.Semantico };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+                herencia = false;
+            }
+        }
+
+        public static void variableSinValor(NodoAtributo miNodoAtributo, NodoClase nodoClaseActual)
+        {
+            var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Atributo sin valor asignado", TipoError = tipoError.Semantico };
+            TablaSimbolos.listaErroresSemantico.Add(error);
+        }
+
+
         #endregion
         #region METODOS PARA TS de METODOS
         public static void InsertarNodoMetodo(NodoMetodo miNodoMetodo, List<NodoVariable> misParametros, NodoClase nodoClaseActiva)
@@ -562,10 +580,54 @@ namespace CompiladorJSv2
                 var error = new Error() { Codigo = 604, Linea = miNodoMetodo.renglonDeclaracion, MensajeError = "Tu nombre de metodo no puede llamarse como el nombre de la clase, otro metodo o variable", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
             }
+        }
 
+        public static NodoMetodo BuscarNodoMetodoPorLexema(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva)
+        {
+            return nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == miNodoMetodo.lexema).Value;
+        }
 
+        public static Regreso ObtenerRegresoMetodo(string lexema, NodoClase nodoClaseActiva)
+        {
+            var nodo = nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == lexema);
+            return nodo.Value.miRegreso;
+        }
 
+        public static List<NodoVariable> ObtenerParametrosMetodo(string lexemaMetodo, NodoClase nodoClaseActiva)
+        {
+            var nodo = nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == lexemaMetodo);
+            var nodoVariables = nodo.Value.TablaSimbolosVariables;
+            return nodoVariables.Values.ToList();
+        }
 
+        public static void ComprobarInvocacion(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva)
+        {
+            if (!(miNodoMetodo==null))
+            {
+                if (!nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.Lexema))
+                {
+                    var error = new Error()
+                    {
+                        Codigo = 621,
+                        Linea = miNodoMetodo.renglonDeclaracion,
+                        MensajeError = "Nombre de metodo a invocar inexistente",
+                        TipoError = tipoError.Semantico
+                    };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
+                }
+            }
+            else
+            {
+                var error = new Error()
+                {
+                    Codigo = 623,
+                    Linea = 0,
+                    MensajeError = "Nombre de metodo a invocar inexistente",
+                    TipoError = tipoError.Semantico
+                };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+            }
+            
         }
 
         #endregion
