@@ -500,6 +500,35 @@ namespace CompiladorJSv2
             }
         }
 
+        public static void ExistenAtributosEnClaseConHerenciaExistente(NodoClase miNodoClase, int line, NodoClase miNodoClaseHeredada)
+        {
+            foreach (var item in miNodoClase.TSA.Values)
+            {
+                if (!miNodoClaseHeredada.TSA.ContainsKey(item.valor))
+                {
+                    var error = new Error() { Codigo = 624, Linea = 0, MensajeError = "No se encontro variable", TipoError = tipoError.Semantico };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
+                }
+            }
+        }
+
+        public static void ExistenAtributosEnClaseSinHerenciaExistente(NodoClase miNodoClase, int line, NodoClase miNodoClaseHeredada)
+        {
+            foreach (var item in miNodoClase.TSA.Values)
+            {
+
+            }
+            if (!miNodoClase.TSA.ContainsKey(miNodoClase.Lexema))
+            {
+                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable local no encontrada", TipoError = tipoError.Semantico };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+            }
+        }
+
+
+
+
+
         #endregion
         #region METODOS para TS de Atributos
         static public void InsertarNodoAtributo
@@ -508,9 +537,6 @@ namespace CompiladorJSv2
 
             if (!tablaSimbolosClase.ContainsKey(miNodoAtributo.lexema)) //Verificar que el nombre de la clase no se uso
             {
-
-                //if (miNodoAtributo.miAlcance == Alcance.Public)
-                //{
                 if (!nodoClaseActual.TSA.ContainsKey(miNodoAtributo.lexema)) //Verificar que no exista
                 {
                     nodoClaseActual.TSA.Add(miNodoAtributo.lexema, miNodoAtributo);
@@ -520,7 +546,7 @@ namespace CompiladorJSv2
                     var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Ya existe un miembro con ese identificador", TipoError = tipoError.Semantico };
                     TablaSimbolos.listaErroresSemantico.Add(error);
                 }
-                //}
+                
 
 
 
@@ -533,20 +559,19 @@ namespace CompiladorJSv2
 
         }
 
-        public static void ExisteVariableClases(string lexema, NodoClase minodoClase, int line)
+        public static void ExisteVariableClasesSinHerencia(string lexema, NodoClase minodoClase, int line)
         {
-            herencia = true;
+            
             if (!minodoClase.TSA.ContainsKey(lexema))
             {
-                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable no encontrada", TipoError = tipoError.Semantico };
+                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable local no encontrada", TipoError = tipoError.Semantico };
                 TablaSimbolos.listaErroresSemantico.Add(error);
-                herencia = false;
             }
         }
 
         public static void variableSinValor(NodoAtributo miNodoAtributo, NodoClase nodoClaseActual)
         {
-            var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Atributo sin valor asignado", TipoError = tipoError.Semantico };
+            var error = new Error() { Codigo = 607, Linea = miNodoAtributo.reglonDec, MensajeError = "Atributo no inicializado", TipoError = tipoError.Semantico };
             TablaSimbolos.listaErroresSemantico.Add(error);
         }
 
@@ -602,6 +627,9 @@ namespace CompiladorJSv2
 
         public static void ComprobarInvocacion(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva, List<NodoVariable> parametrosNuevos)
         {
+            int numeroParametrosNuevos = 0;
+            int numeroVariablesTipoParametro = miNodoMetodo.TablaSimbolosVariables.Count(x => x.Value.miTipoVariable == TipoVariable.parametro);
+
             if (!(miNodoMetodo==null))
             {
                 if (!nodoClaseActiva.TSM.ContainsKey(miNodoMetodo.Lexema))
@@ -619,18 +647,18 @@ namespace CompiladorJSv2
                 {
                     foreach (var item in parametrosNuevos)
                     {
-                        if (!miNodoMetodo.TablaSimbolosVariables.ContainsKey(item.lexema)) //Reviso si existen los parametros en el metodo invocado
+                        numeroParametrosNuevos++;
+                    }
+                    if (numeroVariablesTipoParametro != numeroParametrosNuevos)
+                    {
+                        var error = new Error()
                         {
-                            var error = new Error()
-                            {
-                                Codigo = 623,
-                                Linea = miNodoMetodo.renglonDeclaracion,
-                                MensajeError = "Parametros no coinciden",
-                                TipoError = tipoError.Semantico
-                            };
-                            TablaSimbolos.listaErroresSemantico.Add(error);
-                        }
-
+                            Codigo = 623,
+                            Linea = miNodoMetodo.renglonDeclaracion,
+                            MensajeError = "Parametros no coinciden",
+                            TipoError = tipoError.Semantico
+                        };
+                        TablaSimbolos.listaErroresSemantico.Add(error);
                     }
 
                 }

@@ -983,6 +983,7 @@ namespace CompiladorJSv2
                 int puntero2 = 0;
 
                 NodoClase minodoClase = new NodoClase();
+                //NodoClase minodoClaseHeredada = new NodoClase();
 
                 if (listenerSemantico[puntero2].ValorToken < -109 && listenerSemantico[puntero2].ValorToken > -113)
                 {
@@ -1015,12 +1016,12 @@ namespace CompiladorJSv2
                 if (listenerSemantico[puntero2].ValorToken == -50)  // extends
                 {
                     puntero2++;
+                    //minodoClaseHeredada.Lexema = listenerSemantico[puntero2].Lexema;
 
                     TablaSimbolos.ExisteClaseHeredada(listenerSemantico[puntero2].Lexema);
                     if (TablaSimbolos.herencia == true)
                     {
                         minodoClase.Herencia = listenerSemantico[puntero2].Lexema;
-
                     }
                     puntero2++;
                 }
@@ -1047,6 +1048,7 @@ namespace CompiladorJSv2
             {
                 int puntero2 = 0;
                 string valor = null;
+
                 NodoAtributo minodoatributo = new NodoAtributo();
                 if (listenerSemantico[puntero2].ValorToken < -109 && listenerSemantico[puntero2].ValorToken > -113)  // valoresTK de alcance-
                 {
@@ -1112,15 +1114,27 @@ namespace CompiladorJSv2
                         //int x =  1 + a + 1 - a - b - 3 + 4;
                         if (listenerSemantico[puntero2].ValorToken == -1)
                         {
-                            TablaSimbolos.ExisteVariableClases(listenerSemantico[puntero2].Lexema, 
-                                TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema)
-                                , listenerSemantico[puntero2].Linea);
 
+                            
                             if (TablaSimbolos.herencia == true)
                             {
                                 valor += listenerSemantico[puntero2].Lexema;
-                                puntero2++;
                             }
+                            else
+                            {
+                                TablaSimbolos.ExisteVariableClasesSinHerencia(
+                                    listenerSemantico[puntero2].Lexema,
+                                    TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema),
+                                    listenerSemantico[puntero2].Linea
+                                    );
+
+                            }
+
+                            puntero2++;
+
+
+                            
+                            
                         }
                         if (listenerSemantico[puntero2].ValorToken == -2 || listenerSemantico[puntero2].ValorToken == -3)
                         {
@@ -1131,12 +1145,38 @@ namespace CompiladorJSv2
 
                         if (listenerSemantico[puntero2].ValorToken == -27)
                         {
-                            minodoatributo.Valor = valor;
+                            minodoatributo.Valor = listenerSemantico[puntero2-1].Lexema;
+                            minodoatributo.RenglonDec = listenerSemantico[puntero2].Linea;
+
+                            TablaSimbolos.InsertarNodoAtributo(minodoatributo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
+                            if (TablaSimbolos.herencia == true)
+                            {
+                                int claseHerencia = (TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Herencia)).TSA.Count();
+                                if (claseHerencia > 0)
+                                {
+                                    TablaSimbolos.ExistenAtributosEnClaseConHerenciaExistente(
+                                            TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema),
+                                            listenerSemantico[puntero2].Linea,
+                                            TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Herencia)
+                                           );
+                                }
+                                else
+                                {
+                                    TablaSimbolos.herencia = false;
+                                }
+                                    
+
+                                
+                                
+                                
+                            }
                             break;
                         }
 
 
                     }
+
+                    
 
                 }
                 else
@@ -1147,17 +1187,11 @@ namespace CompiladorJSv2
                         TablaSimbolos.variableSinValor(minodoatributo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
                     }
                 }
-                if (listenerSemantico[puntero2].ValorToken == -27) // ;
-                {
-                    minodoatributo.RenglonDec = listenerSemantico[puntero2].Linea;
 
-                    TablaSimbolos.InsertarNodoAtributo(minodoatributo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
+                listenerSemantico = new List<Token>();
 
-                    listenerSemantico = new List<Token>();
-
-                    swSemantico = TipoSemantico.Ninguno;
-                    puntero2 = 0;
-                }
+                swSemantico = TipoSemantico.Ninguno;
+                puntero2 = 0;
 
             }
 
@@ -1377,8 +1411,7 @@ namespace CompiladorJSv2
                 puntero2++; // (
                 puntero2++; // Parametros a mandar
 
-                if (listenerSemantico[puntero2].ValorToken == -1) // verificar si hay paramatros
-                {
+                
                     do
                     {
                         
@@ -1395,7 +1428,7 @@ namespace CompiladorJSv2
                     } while (true);
 
 
-                }
+                
 
                 var claseActiva = TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema);
                 var lexemaMetodo = TablaSimbolos.BuscarNodoMetodoPorLexema(minodoMetodo, claseActiva);
@@ -1417,11 +1450,6 @@ namespace CompiladorJSv2
 
 
 
-            }
-
-            if (swSemantico == TipoSemantico.AsignacionOUT)
-            {
-               
             }
 
 
