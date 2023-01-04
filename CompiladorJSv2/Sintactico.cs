@@ -1119,14 +1119,14 @@ namespace CompiladorJSv2
                             if (TablaSimbolos.herencia == true)
                             {
                                 valor += listenerSemantico[puntero2].Lexema;
-
-
                             }
                             else
                             {
-                                TablaSimbolos.ExisteVariableClases(listenerSemantico[puntero2].Lexema,
-                                TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema)
-                                , listenerSemantico[puntero2].Linea);
+                                TablaSimbolos.ExisteVariableClasesSinHerencia(
+                                    listenerSemantico[puntero2].Lexema,
+                                    TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema),
+                                    listenerSemantico[puntero2].Linea
+                                    );
 
                             }
 
@@ -1149,19 +1149,26 @@ namespace CompiladorJSv2
                             minodoatributo.RenglonDec = listenerSemantico[puntero2].Linea;
 
                             TablaSimbolos.InsertarNodoAtributo(minodoatributo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
-                            if (TablaSimbolos.herencia == true && listenerSemantico[puntero2 - 1].ValorToken == -1)
+                            if (TablaSimbolos.herencia == true)
                             {
-                                int indicadorTemporal = 0;
-                                if (listenerSemantico[puntero2 - 1].ValorToken == -1) //Es un identificador
+                                int claseHerencia = (TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Herencia)).TSA.Count();
+                                if (claseHerencia > 0)
                                 {
-                                    indicadorTemporal = 1;
-                                }
-                                TablaSimbolos.ExistenAtributosEnClase(
+                                    TablaSimbolos.ExistenAtributosEnClaseConHerenciaExistente(
                                             TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema),
                                             listenerSemantico[puntero2].Linea,
-                                            TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Herencia),
-                                            indicadorTemporal
-                                            );
+                                            TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Herencia)
+                                           );
+                                }
+                                else
+                                {
+                                    TablaSimbolos.herencia = false;
+                                }
+                                    
+
+                                
+                                
+                                
                             }
                             break;
                         }
@@ -1404,8 +1411,7 @@ namespace CompiladorJSv2
                 puntero2++; // (
                 puntero2++; // Parametros a mandar
 
-                if (listenerSemantico[puntero2].ValorToken == -1) // verificar si hay paramatros
-                {
+                
                     do
                     {
                         
@@ -1422,7 +1428,7 @@ namespace CompiladorJSv2
                     } while (true);
 
 
-                }
+                
 
                 var claseActiva = TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema);
                 var lexemaMetodo = TablaSimbolos.BuscarNodoMetodoPorLexema(minodoMetodo, claseActiva);

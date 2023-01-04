@@ -500,41 +500,33 @@ namespace CompiladorJSv2
             }
         }
 
-        public static void ExistenAtributosEnClase(NodoClase miNodoClase, int line, NodoClase miNodoClaseHeredada, int indicadorTemporal)
+        public static void ExistenAtributosEnClaseConHerenciaExistente(NodoClase miNodoClase, int line, NodoClase miNodoClaseHeredada)
         {
-            if (indicadorTemporal == 1) //Falla
+            foreach (var item in miNodoClase.TSA.Values)
             {
-                foreach (var item in miNodoClase.TSA.Values)
+                if (!miNodoClaseHeredada.TSA.ContainsKey(item.valor))
                 {
-                    if (!miNodoClaseHeredada.TSA.ContainsKey(item.valor) && !miNodoClase.TSA.ContainsKey(item.valor))
-                    {
-                        var error = new Error() { Codigo = 624, Linea = 0, MensajeError = "No se encontro variable", TipoError = tipoError.Semantico };
-                        TablaSimbolos.listaErroresSemantico.Add(error);
-                    }
-                    else if (!miNodoClaseHeredada.TSA.ContainsKey(item.valor) && miNodoClase.TSA.ContainsKey(item.valor))
-                    {
-
-                    }
+                    var error = new Error() { Codigo = 624, Linea = 0, MensajeError = "No se encontro variable", TipoError = tipoError.Semantico };
+                    TablaSimbolos.listaErroresSemantico.Add(error);
                 }
             }
-            else
-            {
-                foreach (var item in miNodoClase.TSA.Values)
-                {
-                    if (!miNodoClase.TSA.ContainsKey(item.Lexema))
-                    {
-                        var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable local no encontrada", TipoError = tipoError.Semantico };
-                        TablaSimbolos.listaErroresSemantico.Add(error);
-                    }
-                }
-
-                
-            }
-            
         }
-            
 
-        
+        public static void ExistenAtributosEnClaseSinHerenciaExistente(NodoClase miNodoClase, int line, NodoClase miNodoClaseHeredada)
+        {
+            foreach (var item in miNodoClase.TSA.Values)
+            {
+
+            }
+            if (!miNodoClase.TSA.ContainsKey(miNodoClase.Lexema))
+            {
+                var error = new Error() { Codigo = 619, Linea = line, MensajeError = "Variable local no encontrada", TipoError = tipoError.Semantico };
+                TablaSimbolos.listaErroresSemantico.Add(error);
+            }
+        }
+
+
+
 
 
         #endregion
@@ -567,7 +559,7 @@ namespace CompiladorJSv2
 
         }
 
-        public static void ExisteVariableClases(string lexema, NodoClase minodoClase, int line)
+        public static void ExisteVariableClasesSinHerencia(string lexema, NodoClase minodoClase, int line)
         {
             
             if (!minodoClase.TSA.ContainsKey(lexema))
@@ -635,8 +627,8 @@ namespace CompiladorJSv2
 
         public static void ComprobarInvocacion(NodoMetodo miNodoMetodo, NodoClase nodoClaseActiva, List<NodoVariable> parametrosNuevos)
         {
-            int numeroParametrosViejos = 0;
             int numeroParametrosNuevos = 0;
+            int numeroVariablesTipoParametro = miNodoMetodo.TablaSimbolosVariables.Count(x => x.Value.miTipoVariable == TipoVariable.parametro);
 
             if (!(miNodoMetodo==null))
             {
@@ -657,11 +649,7 @@ namespace CompiladorJSv2
                     {
                         numeroParametrosNuevos++;
                     }
-                    foreach (var item in miNodoMetodo.TablaSimbolosVariables.Values)
-                    {
-                        numeroParametrosViejos++;
-                    }
-                    if (numeroParametrosViejos != numeroParametrosNuevos)
+                    if (numeroVariablesTipoParametro != numeroParametrosNuevos)
                     {
                         var error = new Error()
                         {
