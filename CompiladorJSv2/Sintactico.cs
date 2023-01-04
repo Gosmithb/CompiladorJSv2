@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CompiladorJSv2
@@ -66,6 +67,9 @@ namespace CompiladorJSv2
 
             InvocacionIN,
             InvocacionOUT,
+
+            CondicionalIN,
+            CondicionalOUT
 
         }
 
@@ -941,6 +945,9 @@ namespace CompiladorJSv2
                 case 1043:
                     swSemantico = TipoSemantico.InvocacionIN;
                     break;
+                case 1026:
+                    swSemantico = TipoSemantico.CondicionalIN;
+                    break;
 
             }
         }
@@ -972,6 +979,10 @@ namespace CompiladorJSv2
             if (listaTokens[punteroLexico].ValorToken == -27 /* ; */ && swSemantico == TipoSemantico.InvocacionIN)
             {
                 swSemantico = TipoSemantico.InvocacionOUT;
+            }
+            if (listaTokens[punteroLexico].ValorToken == -21 /* ; */ && swSemantico == TipoSemantico.CondicionalIN)
+            {
+                swSemantico = TipoSemantico.CondicionalOUT;
             }
 
             //Lista de tokens temporal para una clase
@@ -1115,7 +1126,7 @@ namespace CompiladorJSv2
                         if (listenerSemantico[puntero2].ValorToken == -1)
                         {
 
-                            
+
                             if (TablaSimbolos.herencia == true)
                             {
                                 valor += listenerSemantico[puntero2].Lexema;
@@ -1133,8 +1144,8 @@ namespace CompiladorJSv2
                             puntero2++;
 
 
-                            
-                            
+
+
                         }
                         if (listenerSemantico[puntero2].ValorToken == -2 || listenerSemantico[puntero2].ValorToken == -3)
                         {
@@ -1145,7 +1156,7 @@ namespace CompiladorJSv2
 
                         if (listenerSemantico[puntero2].ValorToken == -27)
                         {
-                            minodoatributo.Valor = listenerSemantico[puntero2-1].Lexema;
+                            minodoatributo.Valor = listenerSemantico[puntero2 - 1].Lexema;
                             minodoatributo.RenglonDec = listenerSemantico[puntero2].Linea;
 
                             TablaSimbolos.InsertarNodoAtributo(minodoatributo, TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema));
@@ -1164,11 +1175,11 @@ namespace CompiladorJSv2
                                 {
                                     TablaSimbolos.herencia = false;
                                 }
-                                    
 
-                                
-                                
-                                
+
+
+
+
                             }
                             break;
                         }
@@ -1176,7 +1187,7 @@ namespace CompiladorJSv2
 
                     }
 
-                    
+
 
                 }
                 else
@@ -1411,24 +1422,24 @@ namespace CompiladorJSv2
                 puntero2++; // (
                 puntero2++; // Parametros a mandar
 
-                
-                    do
-                    {
-                        
-                        minodoVariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
-                        minodoVariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
-                        minodoVariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
-                        listaparam.Add(minodoVariable);
-                        minodoVariable = new NodoVariable();
 
-                        puntero2++;
-                        if (listenerSemantico[puntero2].ValorToken != -26) break;
-                        puntero2++;
+                do
+                {
 
-                    } while (true);
+                    minodoVariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
+                    minodoVariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
+                    minodoVariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
+                    listaparam.Add(minodoVariable);
+                    minodoVariable = new NodoVariable();
+
+                    puntero2++;
+                    if (listenerSemantico[puntero2].ValorToken != -26) break;
+                    puntero2++;
+
+                } while (true);
 
 
-                
+
 
                 var claseActiva = TablaSimbolos.BusquedaNodoClasePorLexema(TablaSimbolos.ClaseActiva.Lexema);
                 var lexemaMetodo = TablaSimbolos.BuscarNodoMetodoPorLexema(minodoMetodo, claseActiva);
@@ -1452,14 +1463,36 @@ namespace CompiladorJSv2
 
             }
 
+            if (swSemantico == TipoSemantico.CondicionalOUT)
+            {
+                int puntero2 = 0;
+
+                while (true)
+                {
+                    if (listenerSemantico[puntero2].ValorToken == -1)
+                    {
+                        TablaSimbolos.ExisteVariable(listenerSemantico[puntero2].Lexema, TablaSimbolos.MetodoActivo, listenerSemantico[puntero2].Linea);
+                        puntero2++;
+                    }
+                    if (listenerSemantico[puntero2].ValorToken == -2 && listenerSemantico[puntero2].ValorToken == -3)
+                    {
+                        puntero2++;
+                    }
+                    if (listenerSemantico[puntero2].ValorToken == -21) {
+                        puntero2++;
+                        break; 
+                    }
+                    puntero2++;
 
 
-
-
-
-
-
-
+                }
+            }
         }
+
+
     }
 }
+
+
+
+
