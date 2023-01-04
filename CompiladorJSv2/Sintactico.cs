@@ -1422,21 +1422,36 @@ namespace CompiladorJSv2
                 puntero2++; // (
                 puntero2++; // Parametros a mandar
 
-
-                do
+                if (listenerSemantico[puntero2].ValorToken == -21)
                 {
+                    do
+                    {
 
-                    minodoVariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
-                    minodoVariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
-                    minodoVariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
-                    listaparam.Add(minodoVariable);
-                    minodoVariable = new NodoVariable();
+                        puntero2++;
+                        if (listenerSemantico[puntero2].ValorToken != -26) break;
+                        puntero2++;
 
-                    puntero2++;
-                    if (listenerSemantico[puntero2].ValorToken != -26) break;
-                    puntero2++;
+                    } while (true);
+                }
+                else
+                {
+                    do
+                    {
 
-                } while (true);
+                        minodoVariable.lexema = listenerSemantico[puntero2].Lexema;     //nombre del parametro
+                        minodoVariable.reglonDec = listenerSemantico[puntero2].Linea;   //Linea de decla del parametro
+                        minodoVariable.miTipoVariable = TipoVariable.parametro;         //Tipo de variable: Parametro
+                        listaparam.Add(minodoVariable);
+                        minodoVariable = new NodoVariable();
+
+                        puntero2++;
+                        if (listenerSemantico[puntero2].ValorToken != -26) break;
+                        puntero2++;
+
+                    } while (true);
+                }
+
+                
 
 
 
